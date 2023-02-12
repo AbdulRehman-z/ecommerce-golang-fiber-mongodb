@@ -4,7 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
-	services "jwt-golang/services"
+	"jwt-golang/services"
 	"log"
 )
 
@@ -21,11 +21,12 @@ func main() {
 	app := fiber.New()
 	app.Use(logger.New())
 
+	// routes
+
 	// connect to mongodb
 	services.ConnectWithMongodb()
 	// listen to the port + start the server
-	err := app.Listen(port)
-	if err != nil {
-		log.Fatalf("Error while starting the server: %v", err)
+	if err := app.Listen(port); err != nil {
+		log.Fatal("Error starting the server: ", err.Error())
 	}
 }
