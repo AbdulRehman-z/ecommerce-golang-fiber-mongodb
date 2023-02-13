@@ -1,32 +1,35 @@
 package routes
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"jwt-golang/controllers"
+)
 
 func Router(app *fiber.App) {
 	api := app.Group("/api/v1")
-	api.Get("/", controller.Welcome)
+	api.Get("/", controllers.Welcome)
 
-	// auth routes
+	//auth routes
 	authApi := api.Group("/auth")
-	authApi.Post("/signup", controller.Register)
-	authApi.Post("/login", controller.Login)
-	authApi.Post("/logout", controller.Logout)
+	authApi.Post("/signup", controllers.Signup)
+	authApi.Post("/login", controllers.Signin)
+	authApi.Post("/logout", controllers.Logout)
 
 	// user routes
 	userApi := api.Group("/user")
-	userApi.Get("/currentUser", controller.CurrentUser)
+	userApi.Get("/currentUser", controllers.CurrentUser)
 
 	// products routes
 	productsApi := api.Group("/products")
-	productsApi.Get("/", controller.GetAllProducts)
-	productsApi.Get("/:id", controller.GetProduct)
-	productsApi.Post("/", controller.CreateProduct)
-	productsApi.Put("/:id", controller.UpdateProduct)
-	productsApi.Delete("/:id", controller.DeleteProduct)
+	productsApi.Get("/", controllers.GetAllProducts)
+	productsApi.Get("/:id", controllers.GetProduct)
+	productsApi.Post("/", controllers.CreateProduct)
+	productsApi.Put("/:id", controllers.UpdateProduct)
+	productsApi.Delete("/:id", controllers.DeleteProduct)
 
 	// admin routes
 	adminApi := api.Group("/admin")
-	adminApi.Get("/allUsers", controller.GetAllUsers)
-	adminApi.Delete("/deleteUser/:id", controller.DeleteUser)
-	adminApi.Delete("/deleteAllUsers", controller.DeleteAllUsers)
+	adminApi.Get("/allUsers", controllers.GetAllUsers)
+	adminApi.Delete("/deleteUser/:id", controllers.DeleteUser)
+	adminApi.Delete("/deleteAllUsers", controllers.DeleteAllUsers)
 }

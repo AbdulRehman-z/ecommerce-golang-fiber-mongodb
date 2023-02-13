@@ -5,8 +5,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"go.mongodb.org/mongo-driver/mongo"
+	"jwt-golang/database"
 	"jwt-golang/routes"
-	"jwt-golang/services"
 	"log"
 )
 
@@ -23,7 +23,7 @@ func main() {
 	routes.Router(app)
 
 	// connect to mongodb
-	client := services.ConnectWithMongodb()
+	client := database.ConnectWithMongodb()
 
 	// close the connection
 	defer func(client *mongo.Client, ctx context.Context) {
