@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/mongo"
+	"jwt-golang/routes"
 	"jwt-golang/services"
 	"log"
 )
@@ -13,18 +15,24 @@ const (
 )
 
 func main() {
-	// load .env file
-	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
-	}
 
 	app := fiber.New()
 	app.Use(logger.New())
 
 	// routes
+	routes.Router(app)
 
 	// connect to mongodb
-	services.ConnectWithMongodb()
+	client := services.ConnectWithMongodb()
+
+	// close the connection
+	defer func(client *mongo.Client, ctx context.Context) {
+		err := client.Disconnect(ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(client, context.Background())
+
 	// listen to the port + start the server
 	if err := app.Listen(port); err != nil {
 		log.Fatal("Error starting the server: ", err.Error())

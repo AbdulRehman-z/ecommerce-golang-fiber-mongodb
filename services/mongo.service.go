@@ -2,27 +2,36 @@ package services
 
 import (
 	"context"
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"os"
-	"time"
 )
 
-func ConnectWithMongodb() {
-	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
+func ConnectWithMongodb() *mongo.Client {
 
-	clientOptions := options.Client().
-		ApplyURI(os.Getenv("MONGO_URI")).
-		SetServerAPIOptions(serverAPIOptions)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
+	// set mongodb connection string
+	uri := os.Getenv("MONGODB_URI")
+	if uri == "" {
+		log.Fatal("MONGODB_URI is not set")
+	}
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	defer cancel()
-	_, err := mongo.Connect(ctx, clientOptions)
+	// check the connection
+	err = client.Ping(context.TODO(), nil)
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		log.Println("Connected to MongoDB!")
+		log.Println("Connected to mongodb")
 	}
 
+	return client
 }
