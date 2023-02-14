@@ -6,7 +6,7 @@ import (
 	"jwt-golang/database"
 )
 
-var collection *mongo.Collection = database.OpenCollection(database.Client, "users")
+var userCollection *mongo.Collection = database.OpenCollection(database.Client, "users")
 
 func Signup(c *fiber.Ctx) error {
 

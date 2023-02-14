@@ -15,4 +15,5 @@ type User struct {
 	UserType  string             `json:"userType" validate:"required, eq=ADMIN|eq=USER"`
 	CreatedAt time.Time          `json:"created_at"`
 	UpdatedAt time.Time          `json:"updated_at"`
+	Id        string
 }

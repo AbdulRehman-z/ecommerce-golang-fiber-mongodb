@@ -29,6 +29,7 @@ func Router(app *fiber.App) {
 
 	// admin routes
 	adminApi := api.Group("/admin")
+	adminApi.Get("/getUser/:id", controllers.GetUser)
 	adminApi.Get("/allUsers", controllers.GetAllUsers)
 	adminApi.Delete("/deleteUser/:id", controllers.DeleteUser)
 	adminApi.Delete("/deleteAllUsers", controllers.DeleteAllUsers)
