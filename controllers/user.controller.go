@@ -16,6 +16,7 @@ var userCollection *mongo.Collection = database.OpenCollection(database.Client, 
 
 func Signup(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.TODO(), time.Second*5)
+	password := c.Get("password")
 	defer cancel()
 	var user models.User
 	user.ID = primitive.NewObjectID()
@@ -41,8 +42,9 @@ func Signup(c *fiber.Ctx) error {
 	}
 
 	//hash password
-	hashedPassword := utils.HashPassword(user.Password)
-	user.Password = hashedPassword
+	hash, salt, err := utils.HashPassword(password)
+	user.Hash = hash
+	user.Salt = salt
 
 	// insert user into database
 	if _, err := userCollection.InsertOne(ctx, user); err != nil {

@@ -11,7 +11,8 @@ type User struct {
 	FirstName string             `json:"firstname,omitempty" bson:"firstname,omitempty"`
 	LastName  string             `json:"lastname,omitempty" bson:"lastname,omitempty"`
 	Email     string             `json:"email,omitempty" bson:"email,omitempty"`
-	Password  string             `json:"password,omitempty" bson:"password,omitempty"`
+	Hash      []byte             `json:"hash,omitempty" bson:"hash,omitempty"`
+	Salt      []byte             `json:"salt,omitempty" bson:"salt,omitempty"`
 	UserType  string             `json:"userType,omitempty" bson:"userType,omitempty"`
 	Id        string             `json:"id,omitempty" bson:"id,omitempty"`
 	CreatedAt time.Time          `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
