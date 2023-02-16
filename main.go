@@ -18,9 +18,18 @@ func main() {
 
 	app := fiber.New()
 	app.Use(logger.New())
+	//store := session.New()
 
-	// routes
+	// register session store middleware
+	//app.Use(store)
+	// register routes
 	routes.Router(app)
+
+	//routesStack := app.Stack()
+
+	//for _, route := range routesStack {
+	//	//log.Println(route.P)
+	//}
 
 	// connect to mongodb
 	client := database.ConnectWithMongodb()

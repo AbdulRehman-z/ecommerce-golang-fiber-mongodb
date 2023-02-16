@@ -12,15 +12,15 @@ import (
 
 var collection *mongo.Collection = database.OpenCollection(database.Client, "users")
 
-func GetAllUsers(c *fiber.Ctx) error {
+func GetAllUsers(c *fiber.Ctx) {
 
 }
 
-func DeleteUser(c *fiber.Ctx) error {
+func DeleteUser(c *fiber.Ctx) {
 
 }
 
-func DeleteAllUsers(c *fiber.Ctx) error {
+func DeleteAllUsers(c *fiber.Ctx) {
 
 }
 
