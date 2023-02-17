@@ -31,7 +31,11 @@ func VerifyPassword(encodedPassword string, password string) bool {
 	//fmt.Println("boolean: ", encodedPassword, password)
 
 	encodedSaltAndPassword := password
+	// this method is less efficient
 	parts := strings.Split(encodedSaltAndPassword, ".")
+	// this method is more efficient
+	//parts := helpers.SplitString(encodedSaltAndPassword, ".")
+	fmt.Println("parts: ", parts)
 	decodedHashedPassword, err := base64.RawStdEncoding.DecodeString(parts[1])
 	if err != nil {
 		return false
