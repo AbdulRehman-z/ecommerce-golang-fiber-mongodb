@@ -1,10 +1,12 @@
 package utils
 
 import (
+	"bytes"
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
 	"golang.org/x/crypto/argon2"
+	"strings"
 )
 
 func HashPassword(password string) (string, error) {
@@ -23,8 +25,30 @@ func HashPassword(password string) (string, error) {
 }
 
 // ComparePassword compares the password with the hash
-func VerifyPassword() {
 
+func VerifyPassword(encodedPassword string, password string) bool {
+	// decode base64  password
+	//fmt.Println("boolean: ", encodedPassword, password)
+
+	encodedSaltAndPassword := password
+	parts := strings.Split(encodedSaltAndPassword, ".")
+	decodedHashedPassword, err := base64.RawStdEncoding.DecodeString(parts[1])
+	if err != nil {
+		return false
+	}
+	decodedSalt, err := base64.RawStdEncoding.DecodeString(parts[0])
+	if err != nil {
+		return false
+	}
+
+	// hash the password with the same salt
+	hashedPassword := argon2.IDKey([]byte(encodedPassword), decodedSalt, 1, 64*1024, 4, 32)
+
+	// compare the hashedPassword with hash
+	if bytes.Equal(hashedPassword, decodedHashedPassword) {
+		return true
+	}
+	return false
 }
 
 func VerifyToken(token string) {

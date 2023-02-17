@@ -2,17 +2,18 @@ package utils
 
 import (
 	"github.com/golang-jwt/jwt/v4"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"os"
 	"time"
 )
 
 type Claims struct {
-	Id    string
+	Id    primitive.ObjectID
 	Email string
 	jwt.StandardClaims
 }
 
-func CreateToken(id string, email string) (tokenString string, err error) {
+func CreateToken(id primitive.ObjectID, email string) (tokenString string, err error) {
 	claims := &Claims{
 		Id:    id,
 		Email: email,

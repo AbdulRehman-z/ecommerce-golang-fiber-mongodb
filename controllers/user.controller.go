@@ -53,7 +53,7 @@ func Signup(c *fiber.Ctx) error {
 	}
 
 	// sign jwt with user id and email
-	signedToken, err := utils.CreateToken(user.Id, user.Email)
+	signedToken, err := utils.CreateToken(user.ID, user.Email)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"status":  "error",
@@ -79,8 +79,77 @@ func Signup(c *fiber.Ctx) error {
 	})
 }
 
-func Signin(c *fiber.Ctx) {
+func Signin(c *fiber.Ctx) error {
 
+	type SigninRequest struct {
+		Email    string `json:"email" validate:"required,email"`
+		Password string `json:"password" validate:"required"`
+	}
+
+	ctx, cancel := context.WithTimeout(context.TODO(), 10*time.Second)
+	defer cancel()
+
+	// parse request body
+	var req SigninRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid request body",
+			"data":    err.Error(),
+		})
+	}
+
+	// get email and password from request body
+	password := req.Password
+	email := req.Email
+
+	// check if user exists
+	existingUser, err := userCollection.FindOne(ctx, bson.M{"email": email}).DecodeBytes()
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "User does not exist",
+			"data":    err.Error(),
+		})
+	}
+
+	//fmt.Println("existingUser", existingUser.Lookup("password").StringValue())
+	// check if password is correct
+	isValid := utils.VerifyPassword(password, existingUser.Lookup("password").StringValue())
+	//fmt.Println(isValid)
+	if !isValid {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid credentials",
+			"data":    nil,
+		})
+	}
+
+	// sign jwt with user id and email
+	signedToken, err := utils.CreateToken(existingUser.Lookup("_id").ObjectID(), existingUser.Lookup("email").StringValue())
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Failed to create token",
+			"data":    err.Error(),
+		})
+	}
+
+	// add token to cookie session
+	cookie := &fiber.Cookie{
+		Name:     "jwt",
+		Value:    signedToken,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+	}
+	// set cookie
+	c.Cookie(cookie)
+
+	return c.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "User signed in successfully",
+		"data":    existingUser,
+	})
 }
 
 func Logout(c *fiber.Ctx) {
