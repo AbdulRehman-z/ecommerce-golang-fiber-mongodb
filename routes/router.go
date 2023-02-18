@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"jwt-golang/controllers"
+	"jwt-golang/middlewares"
 )
 
 func Router(app *fiber.App) {
@@ -14,7 +15,7 @@ func Router(app *fiber.App) {
 	userApi.Post("/signup", controllers.Signup)
 	userApi.Post("/signin", controllers.Signin)
 	userApi.Post("/signout", controllers.Signout)
-	//userApi.Get("/profile", controllers.Profile)
+	userApi.Get("/profile", middlewares.RequireAuthMiddleware, controllers.Profile)
 
 	// user routes
 

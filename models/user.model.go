@@ -13,7 +13,7 @@ type User struct {
 	Email     string             `json:"email,omitempty" bson:"email,omitempty"`
 	Password  string             `json:"password,omitempty" bson:"password,omitempty"`
 	UserType  string             `json:"userType,omitempty" bson:"userType,omitempty"`
-	Id        string             `json:"id,omitempty" bson:"id,omitempty"`
-	CreatedAt time.Time          `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	UpdatedAt time.Time          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
+	//Id        string             `json:"id,omitempty" bson:"id,omitempty"`
+	CreatedAt time.Time `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	UpdatedAt time.Time `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
 }

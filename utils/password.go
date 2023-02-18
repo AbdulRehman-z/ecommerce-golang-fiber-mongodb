@@ -54,6 +54,3 @@ func VerifyPassword(encodedPassword string, password string) bool {
 	}
 	return false
 }
-
-func VerifyToken(token string) {
-}

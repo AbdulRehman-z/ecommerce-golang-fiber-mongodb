@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -127,6 +128,8 @@ func Signin(c *fiber.Ctx) error {
 
 	// sign jwt with user id and email
 	signedToken, err := utils.CreateToken(existingUser.Lookup("_id").ObjectID(), existingUser.Lookup("email").StringValue())
+	fmt.Println("signedtoken: ", signedToken)
+
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"status":  "error",
@@ -171,6 +174,42 @@ func Signout(c *fiber.Ctx) error {
 	})
 }
 
-func Profile(c *fiber.Ctx) {
+func Profile(c *fiber.Ctx) error {
+	// get id and email from fiber.context
+	// this is more efficient
+	id, ok := c.Locals("id").(string)
+	if !ok {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  "error",
+			"message": "failed to get id",
+		})
+	}
 
+	// this is less efficient
+	//email, ok := c.Locals("email").(string)
+	//if !ok {
+	//	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	//		"status":  "error",
+	//		"message": "failed to get email",
+	//	})
+	//}
+
+	// get user from database
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	existingUser, err := userCollection.FindOne(ctx, bson.M{"_id": id}).DecodeBytes()
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "user does not exist",
+			"data":    err.Error(),
+		})
+	}
+
+	return c.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "successfully fetched user",
+		"data":    existingUser,
+	})
 }
