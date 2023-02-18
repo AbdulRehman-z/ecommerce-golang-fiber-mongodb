@@ -152,8 +152,23 @@ func Signin(c *fiber.Ctx) error {
 	})
 }
 
-func Logout(c *fiber.Ctx) {
+func Signout(c *fiber.Ctx) error {
+	// delete cookie
+	cookie := &fiber.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	}
 
+	// set cookie
+	c.Cookie(cookie)
+
+	return c.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "User logged out successfully",
+		"data":    nil,
+	})
 }
 
 func Profile(c *fiber.Ctx) {

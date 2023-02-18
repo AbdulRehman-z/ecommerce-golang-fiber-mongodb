@@ -13,7 +13,7 @@ func Router(app *fiber.App) {
 	userApi := api.Group("/users/auth")
 	userApi.Post("/signup", controllers.Signup)
 	userApi.Post("/signin", controllers.Signin)
-	//userApi.Post("/logout", controllers.Logout)
+	userApi.Post("/signout", controllers.Signout)
 	//userApi.Get("/profile", controllers.Profile)
 
 	// user routes
