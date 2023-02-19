@@ -2,7 +2,6 @@ package utils
 
 import (
 	"errors"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"os"
@@ -49,8 +48,6 @@ func VerifyToken(token string) (string, string, error) {
 		return "", "", errors.New("token is invalid")
 	}
 	// check the type of parsed token
-	fmt.Println("parsedToken: ", parsedToken)
-	fmt.Println("claims: ", claims)
 	if !parsedToken.Valid {
 		return "", "", errors.New("parsed token is invalid")
 	}

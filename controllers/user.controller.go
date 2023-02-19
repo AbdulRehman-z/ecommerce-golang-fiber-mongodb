@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -114,10 +113,8 @@ func Signin(c *fiber.Ctx) error {
 		})
 	}
 
-	//fmt.Println("existingUser", existingUser.Lookup("password").StringValue())
 	// check if password is correct
 	isValid := utils.VerifyPassword(password, existingUser.Lookup("password").StringValue())
-	//fmt.Println(isValid)
 	if !isValid {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
@@ -128,7 +125,6 @@ func Signin(c *fiber.Ctx) error {
 
 	// sign jwt with user id and email
 	signedToken, err := utils.CreateToken(existingUser.Lookup("_id").ObjectID(), existingUser.Lookup("email").StringValue())
-	fmt.Println("signedtoken: ", signedToken)
 
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
@@ -184,15 +180,6 @@ func Profile(c *fiber.Ctx) error {
 			"message": "failed to get id",
 		})
 	}
-
-	// this is less efficient
-	//email, ok := c.Locals("email").(string)
-	//if !ok {
-	//	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-	//		"status":  "error",
-	//		"message": "failed to get email",
-	//	})
-	//}
 
 	// get user from database
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

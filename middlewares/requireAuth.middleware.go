@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"jwt-golang/utils"
 )
@@ -28,8 +27,6 @@ func RequireAuthMiddleware(c *fiber.Ctx) error {
 
 	// check if token is valid
 	id, email, err := utils.VerifyToken(token)
-	fmt.Println("---------------------id------------------: ", id)
-	fmt.Println("---------------------email-------------------: ", email)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  "error",
