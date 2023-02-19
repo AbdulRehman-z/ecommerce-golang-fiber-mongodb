@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -9,6 +10,7 @@ import (
 	"jwt-golang/database"
 	"jwt-golang/models"
 	"jwt-golang/utils"
+	"os"
 	"time"
 )
 
@@ -22,14 +24,32 @@ func Signup(c *fiber.Ctx) error {
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
 	user.UserId = user.ID.Hex()
-	user.UserType = "USER"
-	//u.ID = .InsertedID.(primitive.ObjectID)
+
 	if err := c.BodyParser(&user); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Invalid user data for model binding",
 			"data":    err.Error(),
 		})
+	}
+
+	// check if individual is USER or ADMIN
+	if user.Password == os.Getenv("ADMIN_PASS") && user.Email == os.Getenv("ADMIN_EMAIL") {
+		user.UserType = "ADMIN"
+	} else {
+		user.UserType = "USER"
+	}
+	fmt.Println(user.UserType)
+	// allow only one admin user
+	if user.UserType == "ADMIN" {
+		filter := bson.M{"userType": "ADMIN"}
+		if _, err := userCollection.FindOne(ctx, filter).DecodeBytes(); err == nil {
+			return c.Status(400).JSON(fiber.Map{
+				"status":  "error",
+				"message": "Admin user already exists",
+				"data":    c.JSON(err),
+			})
+		}
 	}
 
 	// check if user already exists
