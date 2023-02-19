@@ -18,10 +18,10 @@ func Router(app *fiber.App) {
 	userApi.Get("/profile", middlewares.RequireAuthMiddleware, controllers.Profile)
 
 	// products routes
-	//productsApi := api.Group("/products")
+	productsApi := api.Group("/products")
 	//productsApi.Get("/", controllers.GetAllProducts)
 	//productsApi.Get("/:id", controllers.GetProduct)
-	//productsApi.Post("/", controllers.CreateProduct)
+	productsApi.Post("/", middlewares.RequireAuthMiddleware, controllers.CreateProduct)
 	//productsApi.Put("/:id", controllers.UpdateProduct)
 	//productsApi.Delete("/:id", controllers.DeleteProduct)
 

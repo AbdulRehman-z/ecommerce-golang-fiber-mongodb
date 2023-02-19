@@ -75,7 +75,7 @@ func Signup(c *fiber.Ctx) error {
 	}
 
 	// sign jwt with user id and email
-	signedToken, err := utils.CreateToken(user.ID, user.Email)
+	signedToken, err := utils.CreateToken(user.ID, user.Email, user.UserType)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"status":  "error",
@@ -146,7 +146,8 @@ func Signin(c *fiber.Ctx) error {
 	}
 
 	// sign jwt with user id and email
-	signedToken, err := utils.CreateToken(existingUser.Lookup("_id").ObjectID(), existingUser.Lookup("email").StringValue())
+	signedToken, err := utils.CreateToken(existingUser.Lookup("_id").ObjectID(),
+		existingUser.Lookup("email").StringValue(), existingUser.Lookup("userType").StringValue())
 
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
@@ -207,7 +208,7 @@ func Profile(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	existingUser, err := userCollection.FindOne(ctx, bson.M{"_id": id}).DecodeBytes()
+	existingUser, err := userCollection.FindOne(ctx, bson.M{"userId": id}).DecodeBytes()
 	if err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",

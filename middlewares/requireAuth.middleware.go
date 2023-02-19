@@ -26,7 +26,7 @@ func RequireAuthMiddleware(c *fiber.Ctx) error {
 	}
 
 	// check if token is valid
-	id, email, err := utils.VerifyToken(token)
+	id, email, userType, err := utils.VerifyToken(token)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  "error",
@@ -37,5 +37,6 @@ func RequireAuthMiddleware(c *fiber.Ctx) error {
 	// set user id and email to context
 	c.Locals("id", id)
 	c.Locals("email", email)
+	c.Locals("userType", userType)
 	return c.Next()
 }
