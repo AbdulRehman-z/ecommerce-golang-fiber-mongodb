@@ -9,10 +9,9 @@ func ValidateCredentialsMiddleware(c *fiber.Ctx) error {
 	validate := validator.New()
 
 	type UserInputCred struct {
-		FirstName string `json:"firstName" validate:"required,alpha"`
-		LastName  string `json:"lastName" validate:"required,alpha"`
-		Email     string `json:"email" validate:"required,email"`
-		Password  string `json:"password" validate:"required,min=8"`
+		Username string `json:"username" validate:"required"`
+		Email    string `json:"email" validate:"required,email"`
+		Password string `json:"password" validate:"required,min=8"`
 	}
 
 	// get the user inputs
