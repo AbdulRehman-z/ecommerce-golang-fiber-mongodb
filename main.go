@@ -21,9 +21,10 @@ func main() {
 	routes.Router(app)
 
 	//routesStack := app.Stack()
+	client := database.Client
 
 	// connect to mongodb
-	client := database.ConnectWithMongodb()
+	//Client := database.ConnectWithMongodb()
 
 	// close the connection
 	defer func(client *mongo.Client, ctx context.Context) {
