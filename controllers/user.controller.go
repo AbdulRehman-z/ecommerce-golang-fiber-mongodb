@@ -21,11 +21,13 @@ func Signup(c *fiber.Ctx) error {
 	user.ID = primitive.NewObjectID()
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
+	user.UserId = user.ID.Hex()
+	user.UserType = "USER"
 	//u.ID = .InsertedID.(primitive.ObjectID)
 	if err := c.BodyParser(&user); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Invalid user data",
+			"message": "Invalid user data for model binding",
 			"data":    err.Error(),
 		})
 	}

@@ -12,12 +12,10 @@ func Router(app *fiber.App) {
 
 	//auth routes
 	userApi := api.Group("/users/auth")
-	userApi.Post("/signup", controllers.Signup)
-	userApi.Post("/signin", controllers.Signin)
+	userApi.Post("/signup", middlewares.ValidateCredentialsMiddleware, controllers.Signup)
+	userApi.Post("/signin", middlewares.ValidateCredentialsMiddleware, controllers.Signin)
 	userApi.Post("/signout", controllers.Signout)
 	userApi.Get("/profile", middlewares.RequireAuthMiddleware, controllers.Profile)
-
-	// user routes
 
 	// products routes
 	//productsApi := api.Group("/products")

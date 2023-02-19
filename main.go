@@ -18,11 +18,10 @@ func main() {
 
 	app := fiber.New()
 	app.Use(logger.New())
-
 	routes.Router(app)
 
 	//routesStack := app.Stack()
-	
+
 	// connect to mongodb
 	client := database.ConnectWithMongodb()
 
