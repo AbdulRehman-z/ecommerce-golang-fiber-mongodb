@@ -118,8 +118,39 @@ func GetAllProducts(c *fiber.Ctx) error {
 	})
 }
 
-func GetProduct(c *fiber.Ctx) {
+func GetProduct(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
+	defer cancel()
 
+	// get product id from params
+	id := c.Params("id")
+
+	// parse id
+	productId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid product id",
+			"data":    err,
+		})
+	}
+
+	// get product
+	product, err := productCollection.FindOne(ctx, bson.M{"_id": productId}).DecodeBytes()
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Error getting product",
+			"data":    err,
+		})
+	}
+
+	// return product
+	return c.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Product fetched successfully",
+		"data":    product.String(),
+	})
 }
 
 func UpdateProduct(c *fiber.Ctx) {
