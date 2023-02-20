@@ -92,7 +92,7 @@ func GetAllProducts(c *fiber.Ctx) error {
 	defer cancel()
 
 	// get all products
-	fetchedProducts, err := productCollection.Find(ctx, bson.M{})
+	cursor, err := productCollection.Find(ctx, bson.M{})
 	if err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
@@ -103,14 +103,13 @@ func GetAllProducts(c *fiber.Ctx) error {
 
 	// parse products
 	var products []bson.M
-	if err = fetchedProducts.All(ctx, &products); err != nil {
+	if err := cursor.All(ctx, &products); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Error parsing products",
 			"data":    err,
 		})
 	}
-
 	// return success
 	return c.Status(200).JSON(fiber.Map{
 		"status":  "success",
