@@ -16,7 +16,7 @@ var productCollection *mongo.Collection = database.OpenCollection(database.Clien
 
 func CreateProduct(c *fiber.Ctx) error {
 
-	gofakeit.Seed(11)
+	gofakeit.Seed(0)
 	ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
 	defer cancel()
 	// check if user is signed in
@@ -43,15 +43,22 @@ func CreateProduct(c *fiber.Ctx) error {
 	product.ID = primitive.NewObjectID()
 	product.CreatedAt = time.Now()
 	product.UpdatedAt = time.Now()
+	//categories := gofakeit.Categories()
+	product.Category = "shirts"
+	product.Name = gofakeit.Name()
+	product.Description = gofakeit.Sentence(10)
+	product.Price = gofakeit.Price(100, 1000)
+	product.Quantity = gofakeit.Number(1, 100)
+	product.Images = []string{gofakeit.ImageURL(100, 100)}
 
 	//	parse request body
-	if err := c.BodyParser(&product); err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"status":  "error",
-			"message": "Invalid product data for model binding",
-			"data":    err,
-		})
-	}
+	//if err := c.BodyParser(&product); err != nil {
+	//	return c.Status(400).JSON(fiber.Map{
+	//		"status":  "error",
+	//		"message": "Invalid product data for model binding",
+	//		"data":    err,
+	//	})
+	//}
 
 	// check if product already exists
 	filter := bson.M{"name": product.ID}
