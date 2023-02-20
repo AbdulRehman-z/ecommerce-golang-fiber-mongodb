@@ -3,6 +3,8 @@ module jwt-golang
 go 1.19
 
 require (
+	github.com/brianvoe/gofakeit/v6 v6.20.1
+	github.com/bxcodec/faker/v3 v3.8.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-playground/validator/v10 v10.11.2
 	github.com/gofiber/fiber/v2 v2.42.0

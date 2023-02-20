@@ -1,6 +1,9 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
+)
 
 type Product struct {
 	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
@@ -10,5 +13,6 @@ type Product struct {
 	Quantity    int                `json:"quantity,omitempty" bson:"quantity,omitempty"`
 	Category    string             `json:"category,omitempty" bson:"category,omitempty"`
 	Images      []string           `json:"images,omitempty" bson:"images,omitempty"`
-	Url         string             `json:"url,omitempty" bson:"url,omitempty"`
+	CreatedAt   time.Time          `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	UpdatedAt   time.Time          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
 }
