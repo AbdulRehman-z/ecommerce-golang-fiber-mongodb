@@ -87,8 +87,36 @@ func CreateProduct(c *fiber.Ctx) error {
 	})
 }
 
-func GetAllProducts(c *fiber.Ctx) {
+func GetAllProducts(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
+	defer cancel()
 
+	// get all products
+	fetchedProducts, err := productCollection.Find(ctx, bson.M{})
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Error getting products",
+			"data":    err,
+		})
+	}
+
+	// parse products
+	var products []bson.M
+	if err = fetchedProducts.All(ctx, &products); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Error parsing products",
+			"data":    err,
+		})
+	}
+
+	// return success
+	return c.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Products fetched successfully",
+		"data":    products,
+	})
 }
 
 func GetProduct(c *fiber.Ctx) {
