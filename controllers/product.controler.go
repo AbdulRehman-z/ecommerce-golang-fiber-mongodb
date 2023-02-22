@@ -6,13 +6,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"jwt-golang/database"
 	"jwt-golang/models"
 	"time"
 )
 
-var productCollection *mongo.Collection = database.OpenCollection(database.Client, "products")
+var productCollection = database.OpenCollection(database.Client, "products")
 
 func CreateProduct(c *fiber.Ctx) error {
 
@@ -220,6 +219,57 @@ func UpdateProduct(c *fiber.Ctx) error {
 	})
 }
 
-func DeleteProduct(c *fiber.Ctx) {
+func DeleteProduct(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
+	defer cancel()
+
+	//// check and retrieve userType from token
+	userType := c.Locals("userType").(string)
+	if userType == "" {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid user data for model binding",
+			"data":    nil,
+		})
+	}
+	//
+	//// check if user is admin
+	if userType != "ADMIN" {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Only admin can create products",
+			"data":    nil,
+		})
+	}
+
+	// get product id from params
+	id, err := primitive.ObjectIDFromHex(c.Params("id"))
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid product id",
+			"data":    err,
+		})
+	}
+
+	// filter product by id
+	filter := bson.M{"_id": id}
+
+	// delete product
+	_, err = productCollection.DeleteOne(ctx, filter)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Error deleting product",
+			"data":    err,
+		})
+	}
+
+	// return success
+	return c.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Product deleted successfully",
+		"data":    nil,
+	})
 
 }
