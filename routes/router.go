@@ -22,7 +22,7 @@ func Router(app *fiber.App) {
 	productsApi.Get("/", controllers.GetAllProducts)
 	productsApi.Get("/:id", controllers.GetProduct)
 	productsApi.Post("/create", middlewares.RequireAuthMiddleware, controllers.CreateProduct)
-	//productsApi.Put("/:id", controllers.UpdateProduct)
+	productsApi.Put("/:id", middlewares.RequireAuthMiddleware, controllers.UpdateProduct)
 	//productsApi.Delete("/:id", controllers.DeleteProduct)
 
 	// admin routes

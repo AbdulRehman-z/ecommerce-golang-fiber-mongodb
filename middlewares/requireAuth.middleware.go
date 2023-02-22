@@ -14,14 +14,14 @@ func RequireAuthMiddleware(c *fiber.Ctx) error {
 	if authHeader == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Missing Authorization header",
+			"message": "Try to signin first",
 		})
 	}
 
 	if token == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Missing token",
+			"message": "Try to signin first",
 		})
 	}
 
