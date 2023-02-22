@@ -256,7 +256,7 @@ func DeleteProduct(c *fiber.Ctx) error {
 	filter := bson.M{"_id": id}
 
 	// delete product
-	_, err = productCollection.DeleteOne(ctx, filter)
+	_, err = productCollection.FindOneAndDelete(ctx, filter).DecodeBytes()
 	if err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
