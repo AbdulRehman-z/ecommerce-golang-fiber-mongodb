@@ -153,8 +153,71 @@ func GetProduct(c *fiber.Ctx) error {
 	})
 }
 
-func UpdateProduct(c *fiber.Ctx) {
+func UpdateProduct(c *fiber.Ctx) error {
+	// TODO
+	ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
+	defer cancel()
 
+	// take update data from request body
+	var updateData bson.M
+	if err := c.BodyParser(&updateData); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid update data for model binding",
+			"data":    err,
+		})
+	}
+
+	//// check and retrieve userType from token
+	userType := c.Locals("userType").(string)
+	if userType == "" {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid user data for model binding",
+			"data":    nil,
+		})
+	}
+	//
+	//// check if user is admin
+	if userType != "ADMIN" {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Only admin can create products",
+			"data":    nil,
+		})
+	}
+
+	// get product id from params
+	id := c.Params("id")
+
+	// parse id
+	productId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid product id",
+			"data":    err,
+		})
+	}
+
+	// filter product by id
+	filter := bson.M{"_id": productId}
+
+	// update product
+	product, err := productCollection.FindOneAndUpdate(ctx, filter, bson.M{"$set": updateData}).DecodeBytes()
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Error updating product",
+			"data":    err,
+		})
+	}
+	//return success
+	return c.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Product updated successfully",
+		"data":    product.String(),
+	})
 }
 
 func DeleteProduct(c *fiber.Ctx) {
