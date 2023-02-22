@@ -14,7 +14,7 @@ func Router(app *fiber.App) {
 	userApi := api.Group("/users/auth")
 	userApi.Post("/signup", middlewares.ValidateCredentialsMiddleware, controllers.Signup)
 	userApi.Post("/signin", middlewares.ValidateCredentialsMiddleware, controllers.Signin)
-	userApi.Post("/signout", controllers.Signout)
+	userApi.Post("/signout", middlewares.RequireAuthMiddleware, controllers.Signout)
 	userApi.Get("/profile", middlewares.RequireAuthMiddleware, controllers.Profile)
 
 	// products routes
@@ -24,12 +24,12 @@ func Router(app *fiber.App) {
 	productsApi.Post("/create", middlewares.RequireAuthMiddleware, controllers.CreateProduct)
 	productsApi.Put("/:id", middlewares.RequireAuthMiddleware, controllers.UpdateProduct)
 	productsApi.Delete("/:id", middlewares.RequireAuthMiddleware, controllers.DeleteProduct)
-	productsApi.Delete("/:id", controllers.DeleteProduct)
+	productsApi.Delete("/:id", middlewares.RequireAuthMiddleware, controllers.DeleteProduct)
 
 	// admin routes
-	//adminApi := api.Group("/admin")
-	//adminApi.Get("/getUser/:id", controllers.GetUser)
-	//adminApi.Get("/allUsers", controllers.GetAllUsers)
-	//adminApi.Delete("/deleteUser/:id", controllers.DeleteUser)
-	//adminApi.Delete("/deleteAllUsers", controllers.DeleteAllUsers)
+	adminApi := api.Group("/admin", middlewares.RequireAuthMiddleware)
+	adminApi.Get("/getUser/:id", controllers.GetUser)
+	adminApi.Get("/allUsers", controllers.GetUsers)
+	adminApi.Delete("/deleteUser/:id", controllers.DeleteUser)
+	adminApi.Delete("/deleteUsers", controllers.DeleteAllUsers)
 }
