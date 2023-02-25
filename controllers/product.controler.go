@@ -47,7 +47,7 @@ func CreateProduct(c *fiber.Ctx) error {
 	product.Name = gofakeit.Name()
 	product.Description = gofakeit.Sentence(10)
 	product.Price = gofakeit.Price(100, 1000)
-	product.Quantity = gofakeit.Number(1, 100)
+	product.AvailableQuantity = gofakeit.Number(1, 100)
 	product.Images = []string{gofakeit.ImageURL(100, 100)}
 
 	//	parse request body
@@ -135,8 +135,8 @@ func GetProduct(c *fiber.Ctx) error {
 	}
 
 	// get product
-	product, err := productCollection.FindOne(ctx, bson.M{"_id": productId}).DecodeBytes()
-	if err != nil {
+	var product models.Product
+	if err := productCollection.FindOne(ctx, bson.M{"_id": productId}).Decode(&product); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
 			"message": "Error getting product",
@@ -148,7 +148,7 @@ func GetProduct(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{
 		"status":  "success",
 		"message": "Product fetched successfully",
-		"data":    product.String(),
+		"data":    product,
 	})
 }
 

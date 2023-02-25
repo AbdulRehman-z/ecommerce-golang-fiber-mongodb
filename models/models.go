@@ -6,29 +6,28 @@ import (
 )
 
 type User struct {
-	ID             primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	UserId         string             `json:"userId,omitempty" bson:"userId,omitempty"`
-	Username       string             `json:"username,omitempty" bson:"username,omitempty"`
-	Email          string             `json:"email,omitempty" bson:"email,omitempty"`
-	Password       string             `json:"password,omitempty" bson:"password,omitempty"`
-	UserType       string             `json:"userType,omitempty" bson:"userType,omitempty"`
-	CreatedAt      time.Time          `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	UpdatedAt      time.Time          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
-	AddressDetails []Address          `json:"addresses,omitempty" bson:"addresses,omitempty"`
-	OrderStatus    []Order            `json:"orders,omitempty" bson:"orders,omitempty"`
-	UserCart       []ProductsToOrder  `json:"cart,omitempty" bson:"cart,omitempty"`
+	ID             primitive.ObjectID `json:"_id" bson:"_id"`
+	Username       string             `json:"username" bson:"username"`
+	Email          string             `json:"email" bson:"email"`
+	Password       string             `json:"password" bson:"password"`
+	UserType       string             `json:"userType" bson:"userType"`
+	CreatedAt      time.Time          `json:"createdAt" bson:"createdAt"`
+	UpdatedAt      time.Time          `json:"updatedAt" bson:"updatedAt"`
+	AddressDetails []Address          `json:"addresses" bson:"addresses"`
+	OrderStatus    []Order            `json:"orders" bson:"orders"`
+	UserCart       []ProductsToOrder  `json:"userCart" bson:"userCart"`
 }
 
 type Product struct {
-	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Name        string             `json:"name,omitempty" bson:"name,omitempty"`
-	Price       float64            `json:"price,omitempty" bson:"price,omitempty"`
-	Description string             `json:"description,omitempty" bson:"description,omitempty"`
-	Quantity    int                `json:"quantity,omitempty" bson:"quantity,omitempty"`
-	Category    string             `json:"category,omitempty" bson:"category,omitempty"`
-	Images      []string           `json:"images,omitempty" bson:"images,omitempty"`
-	CreatedAt   time.Time          `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	UpdatedAt   time.Time          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
+	ID                primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Name              string             `json:"name,omitempty" bson:"name,omitempty"`
+	Price             float64            `json:"price,omitempty" bson:"price,omitempty"`
+	Description       string             `json:"description,omitempty" bson:"description,omitempty"`
+	AvailableQuantity int                `json:"availableQuantity" bson:"availableQuantity"`
+	Category          string             `json:"category,omitempty" bson:"category,omitempty"`
+	Images            []string           `json:"images,omitempty" bson:"images,omitempty"`
+	CreatedAt         time.Time          `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	UpdatedAt         time.Time          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
 }
 
 type Order struct {
@@ -40,11 +39,12 @@ type Order struct {
 }
 
 type ProductsToOrder struct {
-	ProductId string  `json:"productId,omitempty" bson:"productId,omitempty"`
-	Name      string  `json:"name,omitempty" bson:"name,omitempty"`
-	Quantity  int     `json:"quantity,omitempty" bson:"quantity,omitempty"`
-	Price     float64 `json:"price,omitempty" bson:"price,omitempty"`
-	Rating    int     `json:"rating,omitempty" bson:"rating,omitempty"`
+	ProductId   primitive.ObjectID `json:"productId,omitempty" bson:"productId,omitempty"`
+	Name        string             `json:"name,omitempty" bson:"name,omitempty"`
+	Price       float64            `json:"price,omitempty" bson:"price,omitempty"`
+	BuyQuantity int                `json:"buyQuantity" bson:"buyQuantity"`
+	CreatedAt   time.Time          `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	UpdatedAt   time.Time          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
 }
 
 type Address struct {

@@ -23,7 +23,9 @@ func Signup(c *fiber.Ctx) error {
 	user.ID = primitive.NewObjectID()
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
-	user.UserId = user.ID.Hex()
+	user.AddressDetails = make([]models.Address, 0)
+	user.OrderStatus = make([]models.Order, 0)
+	user.UserCart = make([]models.ProductsToOrder, 0)
 
 	if err := c.BodyParser(&user); err != nil {
 		return c.Status(400).JSON(fiber.Map{
@@ -194,10 +196,10 @@ func Signout(c *fiber.Ctx) error {
 }
 
 func Profile(c *fiber.Ctx) error {
-	// get id and email from fiber.context
-	// this is more efficient
-	id, ok := c.Locals("id").(string)
-	if !ok {
+
+	idLocal := c.Locals("id").(string)
+	userId, err := primitive.ObjectIDFromHex(idLocal)
+	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  "error",
 			"message": "failed to get id",
@@ -208,7 +210,8 @@ func Profile(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	existingUser, err := userCollection.FindOne(ctx, bson.M{"userId": id}).DecodeBytes()
+	var user models.User
+	err = userCollection.FindOne(ctx, bson.M{"_id": userId}).Decode(&user)
 	if err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
@@ -220,6 +223,6 @@ func Profile(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{
 		"status":  "success",
 		"message": "successfully fetched user",
-		"data":    existingUser,
+		"data":    user,
 	})
 }
