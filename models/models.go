@@ -13,12 +13,7 @@ type User struct {
 	UserType    string             `json:"userType" bson:"userType"`
 	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
-	ZipCode     string             `json:"zip,omitempty" bson:"zip,omitempty"`
-	City        string             `json:"city,omitempty" bson:"city,omitempty"`
-	State       string             `json:"state,omitempty" bson:"state,omitempty"`
-	Country     string             `json:"country,omitempty" bson:"country,omitempty"`
-	Street      string             `json:"street,omitempty" bson:"street,omitempty"`
-	HouseNumber string             `json:"houseNumber,omitempty" bson:"houseNumber,omitempty"`
+	Address     Address            `json:"address" bson:"address"`
 	OrderStatus []Order            `json:"orders" bson:"orders"`
 	UserCart    []ProductsToOrder  `json:"userCart" bson:"userCart"`
 }
@@ -53,5 +48,10 @@ type ProductsToOrder struct {
 }
 
 type Address struct {
-	Id primitive.ObjectID `json:"addressId,omitempty" bson:"addressId,omitempty"`
+	ZipCode     string `json:"zip,omitempty" bson:"zip,omitempty"`
+	City        string `json:"city,omitempty" bson:"city,omitempty"`
+	State       string `json:"state,omitempty" bson:"state,omitempty"`
+	Country     string `json:"country,omitempty" bson:"country,omitempty"`
+	Street      string `json:"street,omitempty" bson:"street,omitempty"`
+	HouseNumber string `json:"houseNumber,omitempty" bson:"houseNumber,omitempty"`
 }

@@ -25,12 +25,14 @@ func Signup(c *fiber.Ctx) error {
 	user.ID = primitive.NewObjectID()
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
-	user.ZipCode = gofakeit.Zip()
-	user.City = gofakeit.City()
-	user.State = gofakeit.State()
-	user.Country = gofakeit.Country()
-	user.Street = gofakeit.Street()
-	user.HouseNumber = gofakeit.StreetNumber()
+	var userAddress models.Address
+	userAddress.ZipCode = gofakeit.Zip()
+	userAddress.City = gofakeit.City()
+	userAddress.State = gofakeit.State()
+	userAddress.Country = gofakeit.Country()
+	userAddress.Street = gofakeit.Street()
+	userAddress.HouseNumber = gofakeit.StreetNumber()
+	user.Address = userAddress
 	user.OrderStatus = make([]models.Order, 0)
 	user.UserCart = make([]models.ProductsToOrder, 0)
 

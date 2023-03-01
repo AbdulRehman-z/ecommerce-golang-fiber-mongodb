@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func RemoveAddress(c *fiber.Ctx) error {
+func UpdateAddress(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	idLocal := c.Locals("id").(string)
@@ -21,23 +21,31 @@ func RemoveAddress(c *fiber.Ctx) error {
 			"data":    err,
 		})
 	}
-	emptyAddress := make([]models.Address, 0)
-
-	// find user by id
-	filter := bson.M{"_id": userId}
-	update := bson.M{"$set": bson.M{"addresses": emptyAddress}}
-	_, err = collection.UpdateOne(ctx, filter, update)
-	if err != nil {
+	// get address from body
+	var address models.Address
+	if err := c.BodyParser(&address); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
-			"message": "User not found",
+			"message": "Invalid address",
 			"data":    err,
 		})
 	}
+
+	// find user by id and update address
+	filter := bson.M{"_id": userId}
+	update := bson.M{"$set": bson.M{"address": address}}
+	if _, err := userCollection.UpdateOne(ctx, filter, update); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Address not updated",
+			"data":    err,
+		})
+	}
+
 	// return success message
 	return c.Status(200).JSON(fiber.Map{
 		"status":  "success",
-		"message": "Address removed successfully",
+		"message": "Address updated successfully",
 		"data":    nil,
 	})
 
