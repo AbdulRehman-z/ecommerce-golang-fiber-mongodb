@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -83,7 +82,6 @@ func AddProductToCart(c *fiber.Ctx) error {
 	}
 
 	// user quantity must be less than product quantity
-	fmt.Println("User quantity", productToOrder.BuyQuantity, "Available quantity", product.AvailableQuantity)
 	if productToOrder.BuyQuantity > product.AvailableQuantity {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
@@ -107,8 +105,7 @@ func AddProductToCart(c *fiber.Ctx) error {
 	} else {
 		// check if product is already in cart
 		for _, item := range user.UserCart {
-			boolT := item.ProductId == productId
-			fmt.Println(boolT)
+
 			if item.ProductId == productId {
 				// update quantity in user cart array inside user document
 				filter = bson.M{"_id": userId, "userCart.productId": productId}
@@ -121,7 +118,6 @@ func AddProductToCart(c *fiber.Ctx) error {
 					})
 				}
 			} else {
-				fmt.Println("Product quantity updated")
 				filter = bson.M{"_id": userId}
 				update := bson.M{"$push": bson.M{"userCart": &productToOrder}}
 				_, err = userCollection.UpdateOne(ctx, filter, update)
@@ -137,8 +133,6 @@ func AddProductToCart(c *fiber.Ctx) error {
 	}
 
 	subtractQuantity := product.AvailableQuantity - productToOrder.BuyQuantity
-
-	fmt.Println("User cart", user.UserCart)
 
 	product.AvailableQuantity = subtractQuantity
 

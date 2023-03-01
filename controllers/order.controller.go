@@ -12,14 +12,7 @@ import (
 func OrderOne(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	/*
-		TODO:
-		#Get the user by id
-		#Itterate through the userCart array
-		#Find the order by id
-		#Delete the order from the userCart array
-		#Update the user
-	*/
+
 	userId := c.Locals("id").(string)
 	uid, _ := primitive.ObjectIDFromHex(userId)
 	var model models.User
@@ -67,46 +60,6 @@ func OrderOne(c *fiber.Ctx) error {
 			"message": "order does not exist",
 		})
 	}
-
-	//// find user by id
-	//filter := bson.M{"_id": orderId}
-	//var user models.User
-	//if err := userCollection.FindOne(ctx, filter).Decode(&user); err != nil {
-	//	return c.Status(400).JSON(fiber.Map{
-	//		"status":  "error",
-	//		"message": "order does not exist",
-	//	})
-	//}
-
-	//// find product by id in userCart array
-	//var product models.Product
-	//for _, order := range user.UserCart {
-	//
-	//}
-	//
-	//// delete order from userCart array
-	//
-	//var order models.Order
-	//order.Id = primitive.NewObjectID()
-	//order.CreatedAt = time.Now()
-	//if err := c.BodyParser(&order); err != nil {
-	//	return c.Status(400).JSON(fiber.Map{
-	//		"status":  "error",
-	//		"message": "missing field",
-	//	})
-	//}
-	//
-	//// find user by id & add the order to the orders array
-	//id := c.Params("id")
-	//userId, _ := primitive.ObjectIDFromHex(id)
-	//filter := bson.M{"_id": userId}
-	//update := bson.M{"$push": bson.M{"orders": order}}
-	//if _, err := userCollection.UpdateOne(ctx, filter, update); err != nil {
-	//	return c.Status(400).JSON(fiber.Map{
-	//		"status":  "error",
-	//		"message": "error while adding order",
-	//	})
-	//}
 
 	// return success message
 	return c.Status(200).JSON(fiber.Map{
@@ -172,7 +125,3 @@ func OrderAll(c *fiber.Ctx) error {
 
 }
 
-//
-//func DeleteOrder(c *fiber.Ctx) error {
-//
-//}

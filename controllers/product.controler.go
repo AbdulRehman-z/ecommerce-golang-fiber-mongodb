@@ -41,7 +41,6 @@ func CreateProduct(c *fiber.Ctx) error {
 	product.ID = primitive.NewObjectID()
 	product.CreatedAt = time.Now()
 	product.UpdatedAt = time.Now()
-	//categories := gofakeit.Categories()
 	product.Category = "shirts"
 	product.Name = gofakeit.Name()
 	product.Description = gofakeit.Sentence(10)

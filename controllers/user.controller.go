@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"github.com/brianvoe/gofakeit/v6"
 
 	"github.com/gofiber/fiber/v2"
@@ -50,7 +49,6 @@ func Signup(c *fiber.Ctx) error {
 	} else {
 		user.UserType = "USER"
 	}
-	fmt.Println(user.UserType)
 	// allow only one admin user
 	if user.UserType == "ADMIN" {
 		filter := bson.M{"userType": "ADMIN"}
