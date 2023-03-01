@@ -6,16 +6,21 @@ import (
 )
 
 type User struct {
-	ID             primitive.ObjectID `json:"_id" bson:"_id"`
-	Username       string             `json:"username" bson:"username"`
-	Email          string             `json:"email" bson:"email"`
-	Password       string             `json:"password" bson:"password"`
-	UserType       string             `json:"userType" bson:"userType"`
-	CreatedAt      time.Time          `json:"createdAt" bson:"createdAt"`
-	UpdatedAt      time.Time          `json:"updatedAt" bson:"updatedAt"`
-	AddressDetails []Address          `json:"addresses" bson:"addresses"`
-	OrderStatus    []Order            `json:"orders" bson:"orders"`
-	UserCart       []ProductsToOrder  `json:"userCart" bson:"userCart"`
+	ID          primitive.ObjectID `json:"_id" bson:"_id"`
+	Username    string             `json:"username" bson:"username"`
+	Email       string             `json:"email" bson:"email"`
+	Password    string             `json:"password" bson:"password"`
+	UserType    string             `json:"userType" bson:"userType"`
+	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
+	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
+	ZipCode     string             `json:"zip,omitempty" bson:"zip,omitempty"`
+	City        string             `json:"city,omitempty" bson:"city,omitempty"`
+	State       string             `json:"state,omitempty" bson:"state,omitempty"`
+	Country     string             `json:"country,omitempty" bson:"country,omitempty"`
+	Street      string             `json:"street,omitempty" bson:"street,omitempty"`
+	HouseNumber string             `json:"houseNumber,omitempty" bson:"houseNumber,omitempty"`
+	OrderStatus []Order            `json:"orders" bson:"orders"`
+	UserCart    []ProductsToOrder  `json:"userCart" bson:"userCart"`
 }
 
 type Product struct {
@@ -48,11 +53,5 @@ type ProductsToOrder struct {
 }
 
 type Address struct {
-	Id      primitive.ObjectID `json:"addressId,omitempty" bson:"addressId,omitempty"`
-	Zip     string             `json:"zip,omitempty" bson:"zip,omitempty"`
-	City    string             `json:"city,omitempty" bson:"city,omitempty"`
-	State   string             `json:"state,omitempty" bson:"state,omitempty"`
-	Country string             `json:"country,omitempty" bson:"country,omitempty"`
-	Street  string             `json:"street,omitempty" bson:"street,omitempty"`
-	Number  string             `json:"number,omitempty" bson:"number,omitempty"`
+	Id primitive.ObjectID `json:"addressId,omitempty" bson:"addressId,omitempty"`
 }

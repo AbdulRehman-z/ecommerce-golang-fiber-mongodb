@@ -3,6 +3,8 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"github.com/brianvoe/gofakeit/v6"
+
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -23,7 +25,12 @@ func Signup(c *fiber.Ctx) error {
 	user.ID = primitive.NewObjectID()
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
-	user.AddressDetails = make([]models.Address, 0)
+	user.ZipCode = gofakeit.Zip()
+	user.City = gofakeit.City()
+	user.State = gofakeit.State()
+	user.Country = gofakeit.Country()
+	user.Street = gofakeit.Street()
+	user.HouseNumber = gofakeit.StreetNumber()
 	user.OrderStatus = make([]models.Order, 0)
 	user.UserCart = make([]models.ProductsToOrder, 0)
 

@@ -29,10 +29,9 @@ func Router(app *fiber.App) {
 	// cart routes
 	cartApi := api.Group("/cart", middlewares.RequireAuthMiddleware)
 	cartApi.Post("/remove/:id", controllers.RemoveProductFromCart)
-	//ordersApi.Get("/:id", controllers.GetOrder)
 	cartApi.Post("/add/:id", controllers.AddProductToCart)
-	//ordersApi.Put("/:id", controllers.UpdateOrder)
-	//ordersApi.Delete("/:id", controllers.DeleteOrder)
+
+	// address routes
 
 	// admin routes
 	adminApi := api.Group("/admin", middlewares.RequireAuthMiddleware)
