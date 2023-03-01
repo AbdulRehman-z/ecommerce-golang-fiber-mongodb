@@ -6,16 +6,16 @@ import (
 )
 
 type User struct {
-	ID          primitive.ObjectID `json:"_id" bson:"_id"`
-	Username    string             `json:"username" bson:"username"`
-	Email       string             `json:"email" bson:"email"`
-	Password    string             `json:"password" bson:"password"`
-	UserType    string             `json:"userType" bson:"userType"`
-	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
-	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
-	Address     Address            `json:"address" bson:"address"`
-	OrderStatus []Order            `json:"orders" bson:"orders"`
-	UserCart    []ProductsToOrder  `json:"userCart" bson:"userCart"`
+	ID        primitive.ObjectID `json:"_id" bson:"_id"`
+	Username  string             `json:"username" bson:"username"`
+	Email     string             `json:"email" bson:"email"`
+	Password  string             `json:"password" bson:"password"`
+	UserType  string             `json:"userType" bson:"userType"`
+	CreatedAt time.Time          `json:"createdAt" bson:"createdAt"`
+	UpdatedAt time.Time          `json:"updatedAt" bson:"updatedAt"`
+	Address   Address            `json:"address" bson:"address"`
+	Orders    []Order            `json:"orders" bson:"orders"`
+	UserCart  []ProductsToOrder  `json:"userCart" bson:"userCart"`
 }
 
 type Product struct {
@@ -31,11 +31,10 @@ type Product struct {
 }
 
 type Order struct {
-	Id         string            `json:"id,omitempty" bson:"id,omitempty"`
-	OrderCart  []ProductsToOrder `json:"orderCart,omitempty" bson:"orderCart,omitempty"`
-	TotalPrice float64           `json:"totalPrice,omitempty" bson:"totalPrice,omitempty"`
-	Status     bool              `json:"status,omitempty" bson:"status,omitempty"`
-	CreatedAt  string            `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	Id         primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	OrderCart  []ProductsToOrder  `json:"orderCart,omitempty" bson:"orderCart,omitempty"`
+	TotalPrice float64            `json:"totalPrice,omitempty" bson:"totalPrice,omitempty"`
+	CreatedAt  time.Time          `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 }
 
 type ProductsToOrder struct {

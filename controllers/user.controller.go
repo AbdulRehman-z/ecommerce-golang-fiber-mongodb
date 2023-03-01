@@ -33,7 +33,7 @@ func Signup(c *fiber.Ctx) error {
 	userAddress.Street = gofakeit.Street()
 	userAddress.HouseNumber = gofakeit.StreetNumber()
 	user.Address = userAddress
-	user.OrderStatus = make([]models.Order, 0)
+	user.Orders = make([]models.Order, 0)
 	user.UserCart = make([]models.ProductsToOrder, 0)
 
 	if err := c.BodyParser(&user); err != nil {

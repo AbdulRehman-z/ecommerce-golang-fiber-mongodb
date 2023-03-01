@@ -35,6 +35,10 @@ func Router(app *fiber.App) {
 	addressApi := api.Group("/address", middlewares.RequireAuthMiddleware)
 	addressApi.Put("/update", controllers.UpdateAddress)
 
+	// order routes
+	orderApi := api.Group("/order", middlewares.RequireAuthMiddleware)
+	orderApi.Post("/:id", controllers.OrderOne)
+
 	// admin routes
 	adminApi := api.Group("/admin", middlewares.RequireAuthMiddleware)
 	adminApi.Get("/getUser/:id", controllers.GetUser)
