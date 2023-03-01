@@ -14,7 +14,6 @@ import (
 var productCollection = database.OpenCollection(database.Client, "products")
 
 func CreateProduct(c *fiber.Ctx) error {
-
 	gofakeit.Seed(0)
 	ctx, cancel := context.WithTimeout(context.TODO(), 5*time.Second)
 	defer cancel()
@@ -49,15 +48,6 @@ func CreateProduct(c *fiber.Ctx) error {
 	product.Price = gofakeit.Price(100, 1000)
 	product.AvailableQuantity = gofakeit.Number(1, 100)
 	product.Images = []string{gofakeit.ImageURL(100, 100)}
-
-	//	parse request body
-	//if err := c.BodyParser(&product); err != nil {
-	//	return c.Status(400).JSON(fiber.Map{
-	//		"status":  "error",
-	//		"message": "Invalid product data for model binding",
-	//		"data":    err,
-	//	})
-	//}
 
 	// check if product already exists
 	filter := bson.M{"name": product.ID}

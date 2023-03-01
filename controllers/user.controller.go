@@ -137,8 +137,8 @@ func Signin(c *fiber.Ctx) error {
 	email := req.Email
 
 	// check if user exists
-	existingUser, err := userCollection.FindOne(ctx, bson.M{"email": email}).DecodeBytes()
-	if err != nil {
+	var existingUser bson.Raw
+	if err := userCollection.FindOne(ctx, bson.M{"email": email}).Decode(&existingUser); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"status":  "error",
 			"message": "User does not exist",

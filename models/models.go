@@ -48,7 +48,7 @@ type ProductsToOrder struct {
 }
 
 type Address struct {
-	ZipCode     string `json:"zip,omitempty" bson:"zip,omitempty"`
+	ZipCode     string `json:"zipCode,omitempty" bson:"zipCode,omitempty"`
 	City        string `json:"city,omitempty" bson:"city,omitempty"`
 	State       string `json:"state,omitempty" bson:"state,omitempty"`
 	Country     string `json:"country,omitempty" bson:"country,omitempty"`

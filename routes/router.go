@@ -33,8 +33,7 @@ func Router(app *fiber.App) {
 
 	// address routes
 	addressApi := api.Group("/address", middlewares.RequireAuthMiddleware)
-	//addressApi.Get("/", controllers.GetAddress)
-	addressApi.Post("/update", controllers.UpdateAddress)
+	addressApi.Put("/update", controllers.UpdateAddress)
 
 	// admin routes
 	adminApi := api.Group("/admin", middlewares.RequireAuthMiddleware)
