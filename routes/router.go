@@ -24,7 +24,6 @@ func Router(app *fiber.App) {
 	productsApi.Post("/create", middlewares.RequireAuthMiddleware, controllers.CreateProduct)
 	productsApi.Put("/:id", middlewares.RequireAuthMiddleware, controllers.UpdateProduct)
 	productsApi.Delete("/:id", middlewares.RequireAuthMiddleware, controllers.DeleteProduct)
-	productsApi.Delete("/:id", middlewares.RequireAuthMiddleware, controllers.DeleteProduct)
 
 	// cart routes
 	cartApi := api.Group("/cart", middlewares.RequireAuthMiddleware)
@@ -43,7 +42,7 @@ func Router(app *fiber.App) {
 	// admin routes
 	adminApi := api.Group("/admin", middlewares.RequireAuthMiddleware)
 	adminApi.Get("/getUser/:id", controllers.GetUser)
-	adminApi.Get("/allUsers", controllers.GetUsers)
+	adminApi.Get("/getUsers", controllers.GetUsers)
 	adminApi.Delete("/deleteUser/:id", controllers.DeleteUser)
 	adminApi.Delete("/deleteUsers", controllers.DeleteAllUsers)
 
