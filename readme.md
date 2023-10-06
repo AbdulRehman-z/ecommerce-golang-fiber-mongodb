@@ -52,6 +52,7 @@
 - [x] Run `go mod tidy` to install all the dependencies
 - [x] Run `go run .` to start the server
 
+## License
 
-
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
