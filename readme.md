@@ -1,6 +1,17 @@
 # E-commerce implemented with fiber(v2)
 
+
+
  This is e-commerce backend implemented with fiber(v2) and mongodb. It is a simple e-commerce backend with basic features.
+
+## Environment Variables
+
+Make sure to set the following environment variables:
+
+- `JWT_SECRET` - Used in utils.CreateToken.
+- `ADMIN_PASS` - Used in controllers.Signup.
+- `ADMIN_EMAIL` - Used in controllers.Signup.
+- `MONGO_URI` - Used in database.ConnectWithMongodb.
 
 ### Features
 
@@ -27,17 +38,17 @@
 - [x] GET /api/v1/products/:id (get product by id)
 - [x] POST /api/v1/products/create (create product) -- admin only
 - [x] PUT /api/v1/products/:id (update product) -- admin only
-- [x] DELETE /api/v1/products/:id (delete product) -- admin only      
+- [x] DELETE /api/v1/products/:id (delete product) -- admin only
 
 #### Cart Routes
 
-- [x] POST /api/v1/cart/remove/:id  (remove product from cart)
-- [x] POST /api/v1/cart/add/:id   (add product to cart)
+- [x] POST /api/v1/cart/remove/:id (remove product from cart)
+- [x] POST /api/v1/cart/add/:id (add product to cart)
 
 #### Order Routes
 
-- [x] POST /api/v1/orders        (get all orders)
-- [x] POST /api/v1/orders/create   (create order)
+- [x] POST /api/v1/orders (get all orders)
+- [x] POST /api/v1/orders/create (create order)
 
 ### Admin Routes
 
@@ -55,4 +66,3 @@
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
-
